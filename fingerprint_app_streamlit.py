@@ -20,7 +20,7 @@ st.sidebar.header('User Input Features')
 # upload xls file
 uploaded_file = st.sidebar.file_uploader("Upload your input Excel file", type=["xls"])
 if uploaded_file is not None:
-    input_df = pd.read_excel(uploaded_file)
+    input_df = pd.read_excel(uploaded_file, engine='xlrd')
     
 # select time format
 time_format = st.sidebar.selectbox('Time_format:',("%d/%m/%Y %H:%M","%m/%d/%Y %H:%M","%m/%d/%Y %I:%M %p"))
