@@ -18,7 +18,7 @@ st.sidebar.header('User Input Features')
 # Collects user input features into dataframe
 
 # upload xls file
-uploaded_file = st.sidebar.file_uploader("Upload your input Excel file", type=["xls"])
+uploaded_file = st.sidebar.file_uploader("Upload your input Excel file", type=["xls","xlsx"])
 if uploaded_file is not None:
     input_df = pd.read_excel(uploaded_file, engine="xlrd")
     
