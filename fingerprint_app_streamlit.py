@@ -1,5 +1,8 @@
 import streamlit as st 
 import pandas as pd
+import xlrd
+import base64
+from io import BytesIO
 
 st.write("""
 # Fingerprint absent transpose app
@@ -18,9 +21,9 @@ st.sidebar.header('User Input Features')
 # Collects user input features into dataframe
 
 # upload xls file
-uploaded_file = st.sidebar.file_uploader("Upload your input Excel file", type=["xls","xlsx"])
+uploaded_file = st.sidebar.file_uploader("Upload your input Excel file", type=["xls"])
 if uploaded_file is not None:
-    input_df = pd.read_excel(uploaded_file, engine="xlrd")
+    input_df = pd.read_excel(uploaded_file, engine = "xlrd")
     
 # select time format
 time_format = st.sidebar.selectbox('Time_format:',("%d/%m/%Y %H:%M","%m/%d/%Y %H:%M","%m/%d/%Y %I:%M %p"))
@@ -48,12 +51,35 @@ def fingerprint_transpose(input_df, time_format):
     dfzz = dfzz.apply(pd.Series)
     dfzz = dfzz.reset_index()
     
-    global result_file_name
-    result_file_name = "fingerprint_result.xlsx"
-    writer = pd.ExcelWriter(result_file_name,  datetime_format='hh:mm')
-    dfzz.to_excel(writer, "Sheet1")
-    writer.close()
-    print('done')
+    return dfzz
+    
+    #global result_file_name
+    #result_file_name = "fingerprint_result.xlsx"
+    #writer = pd.ExcelWriter(result_file_name,  datetime_format='hh:mm')
+    #dfzz.to_excel(writer, "Sheet1")
+    #writer.close()
+    #print('done')
+
+# function to download excel. 
+# taken from: https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806/12
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Sheet1')
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
+
+def get_table_download_link(df):
+    """Generates a link allowing the data in a given panda dataframe to be downloaded
+    in:  dataframe
+    out: href string
+    """
+    val = to_excel(df)
+    b64 = base64.b64encode(val)  # val looks like b'...'
+    return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="extract.xlsx">Download csv file</a>' # decode b'abc' => abc
+
+   
 
 # -----------------------------------------------
 # Displays the user input features
@@ -70,5 +96,7 @@ if time_format is not None:
 st.subheader('Download data')
 
 if run_funct == True:
-    fingerprint_transpose(input_df, time_format)
-    st.write('Selesai. Silahkan cek folder anda. File name: '+result_file_name)
+    df = fingerprint_transpose(input_df, time_format)
+    #url = get_table_download_link(df)
+    st.markdown(get_table_download_link(df), unsafe_allow_html=True)
+    st.write('Selesai. Silahkan cek folder anda.')
