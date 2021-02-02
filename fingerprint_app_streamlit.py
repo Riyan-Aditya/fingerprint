@@ -93,10 +93,10 @@ st.subheader('Time format yang dipilih')
 if time_format is not None:
     st.write(time_format)
 
-st.subheader('Download data')
+st.subheader('Preview and Download result')
 
 if run_funct == True:
     df = fingerprint_transpose(input_df, time_format)
-    #url = get_table_download_link(df)
+    st.write(df.head(3))
     st.markdown(get_table_download_link(df), unsafe_allow_html=True)
-    st.write('Selesai. Silahkan cek folder anda.')
+    st.write('Selesai. Silahkan klik kanan dan save link di atas')
