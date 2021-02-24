@@ -26,7 +26,7 @@ if uploaded_file is not None:
     input_df = pd.read_excel(uploaded_file, engine = "xlrd")
     
 # select time format
-time_format = st.sidebar.selectbox('Time_format:',("%d/%m/%Y %H:%M","%m/%d/%Y %H:%M","%m/%d/%Y %I:%M %p"))
+time_format = st.sidebar.selectbox('Time_format:',("%d/%m/%Y %H:%M","%m/%d/%Y %H:%M","%m/%d/%Y %I:%M %p","%d/%m/%Y %H.%M"))
 
 # create button to run function
 run_funct = st.sidebar.button('Run function')
