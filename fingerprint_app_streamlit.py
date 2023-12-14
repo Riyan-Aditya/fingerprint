@@ -12,7 +12,7 @@ This app transpose the data from fingerprint machine for JR Raynaldi Group
 """)
 
 # turn off upload error warning
-st.set_option('deprecation.showfileUploaderEncoding', False)
+# st.set_option('deprecation.showfileUploaderEncoding', False)
 
 # -----------------------------------------------
 # create sidebar
